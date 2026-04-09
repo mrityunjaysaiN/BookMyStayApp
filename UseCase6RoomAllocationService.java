@@ -24,10 +24,15 @@ public class UseCase6RoomAllocationService {
         BookingRequestQueue requestQueue = new BookingRequestQueue();
         RoomAllocationService allocationService = new RoomAllocationService(inventory);
 
-        requestQueue.submitRequest(new Reservation("Alice", "Single", 1));
-        requestQueue.submitRequest(new Reservation("Bob", "Double", 2));
-        requestQueue.submitRequest(new Reservation("Charlie", "Suite", 3));
-        requestQueue.submitRequest(new Reservation("Dana", "Single", 1));
+        try {
+            requestQueue.submitRequest(new Reservation("Alice", "Single", 1));
+            requestQueue.submitRequest(new Reservation("Bob", "Double", 2));
+            requestQueue.submitRequest(new Reservation("Charlie", "Suite", 3));
+            requestQueue.submitRequest(new Reservation("Dana", "Single", 1));
+        } catch (InvalidBookingException e) {
+            System.out.println("Error creating reservations: " + e.getMessage());
+            return;
+        }
 
         System.out.println("Welcome to Book My Stay App - Use Case 6");
         System.out.println("Hotel Booking System v6.0\n");
@@ -47,7 +52,7 @@ public class UseCase6RoomAllocationService {
                 System.out.println("Confirmed reservation for " + reservation.getGuestName()
                         + ": " + reservation.getRoomType() + " assigned " + roomId);
                 processed++;
-            } catch (IllegalStateException exception) {
+            } catch (InvalidBookingException | InvalidInventoryException exception) {
                 System.out.println("Unable to confirm reservation for " + reservation.getGuestName()
                         + ": " + exception.getMessage());
             }

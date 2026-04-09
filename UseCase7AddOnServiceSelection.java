@@ -12,9 +12,15 @@
 public class UseCase7AddOnServiceSelection {
 
     public static void main(String[] args) {
-        Reservation reservation1 = new Reservation("Alice", "Single", 1);
-        Reservation reservation2 = new Reservation("Bob", "Double", 2);
-        Reservation reservation3 = new Reservation("Charlie", "Suite", 3);
+        Reservation reservation1, reservation2, reservation3;
+        try {
+            reservation1 = new Reservation("Alice", "Single", 1);
+            reservation2 = new Reservation("Bob", "Double", 2);
+            reservation3 = new Reservation("Charlie", "Suite", 3);
+        } catch (InvalidBookingException e) {
+            System.out.println("Error creating reservations: " + e.getMessage());
+            return;
+        }
 
         AddOnService breakfast = new AddOnService("Breakfast", 19.99);
         AddOnService airportTransfer = new AddOnService("Airport Transfer", 49.99);

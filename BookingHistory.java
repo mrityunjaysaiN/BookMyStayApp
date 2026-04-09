@@ -23,7 +23,7 @@ public class BookingHistory {
         this.cancelledReservationIds = new HashSet<>();
     }
 
-    public void addConfirmedBooking(Reservation reservation) {
+    public synchronized void addConfirmedBooking(Reservation reservation) {
         if (reservation == null) {
             throw new IllegalArgumentException("Reservation cannot be null");
         }
@@ -62,7 +62,7 @@ public class BookingHistory {
         return cancelledReservationIds.contains(reservation.getReservationId());
     }
 
-    public void markAsCancelled(Reservation reservation) {
+    public synchronized void markAsCancelled(Reservation reservation) {
         if (reservation != null) {
             cancelledReservationIds.add(reservation.getReservationId());
         }

@@ -14,10 +14,15 @@ public class UseCase5BookingRequestQueue {
     public static void main(String[] args) {
         BookingRequestQueue requestQueue = new BookingRequestQueue();
 
-        requestQueue.submitRequest(new Reservation("Alice", "Single", 1));
-        requestQueue.submitRequest(new Reservation("Bob", "Double", 2));
-        requestQueue.submitRequest(new Reservation("Charlie", "Suite", 3));
-        requestQueue.submitRequest(new Reservation("Dana", "Double", 2));
+        try {
+            requestQueue.submitRequest(new Reservation("Alice", "Single", 1));
+            requestQueue.submitRequest(new Reservation("Bob", "Double", 2));
+            requestQueue.submitRequest(new Reservation("Charlie", "Suite", 3));
+            requestQueue.submitRequest(new Reservation("Dana", "Double", 2));
+        } catch (InvalidBookingException e) {
+            System.out.println("Error creating reservations: " + e.getMessage());
+            return;
+        }
 
         System.out.println("Welcome to Book My Stay App - Use Case 5");
         System.out.println("Hotel Booking System v5.0\n");

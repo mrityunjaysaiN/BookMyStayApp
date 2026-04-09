@@ -34,8 +34,13 @@ public class UseCase3InventorySetup {
         printRoomStatus(suiteRoom, inventory);
 
         System.out.println("Updating inventory through controlled methods...\n");
-        inventory.updateAvailability("Double", 4);
-        inventory.updateAvailability("Suite", 1);
+        try {
+            inventory.updateAvailability("Double", 4);
+            inventory.updateAvailability("Suite", 1);
+        } catch (InvalidInventoryException e) {
+            System.out.println("Error updating inventory: " + e.getMessage());
+            return;
+        }
 
         printInventorySnapshot(inventory);
     }

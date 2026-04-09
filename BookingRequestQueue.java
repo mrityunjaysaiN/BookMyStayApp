@@ -18,22 +18,31 @@ public class BookingRequestQueue {
         this.requestQueue = new LinkedList<>();
     }
 
-    public void submitRequest(Reservation reservation) {
+    public synchronized void submitRequest(Reservation reservation) {
         if (reservation == null) {
             throw new IllegalArgumentException("Reservation cannot be null");
         }
         requestQueue.add(reservation);
+        notifyAll(); // Notify waiting threads
     }
 
-    public Reservation peekNextRequest() {
+    public synchronized Reservation peekNextRequest() {
         return requestQueue.peek();
     }
 
-    public boolean hasPendingRequests() {
+    public synchronized boolean hasPendingRequests() {
         return !requestQueue.isEmpty();
     }
 
-    public Reservation pollNextRequest() {
+    public synchronized Reservation pollNextRequest() {
+        while (requestQueue.isEmpty()) {
+            try {
+                wait(); // Wait for requests to be submitted
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                return null;
+            }
+        }
         return requestQueue.poll();
     }
 

@@ -26,7 +26,7 @@ public class CancellationService {
         this.releasedRoomIds = new Stack<>();
     }
 
-    public boolean cancelReservation(Reservation reservation) throws InvalidBookingException, InvalidInventoryException {
+    public synchronized boolean cancelReservation(Reservation reservation) throws InvalidBookingException, InvalidInventoryException {
         if (reservation == null) {
             throw new InvalidBookingException("Reservation cannot be null");
         }

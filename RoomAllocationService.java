@@ -29,7 +29,7 @@ public class RoomAllocationService {
         this.roomTypeCounters = new HashMap<>();
     }
 
-    public String allocateRoom(Reservation reservation) throws InvalidBookingException, InvalidInventoryException {
+    public synchronized String allocateRoom(Reservation reservation) throws InvalidBookingException, InvalidInventoryException {
         if (reservation == null) {
             throw new InvalidBookingException("Reservation cannot be null");
         }

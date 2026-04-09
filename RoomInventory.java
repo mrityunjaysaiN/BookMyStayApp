@@ -29,11 +29,11 @@ public class RoomInventory {
         }
     }
 
-    public int getAvailability(String roomType) {
+    public synchronized int getAvailability(String roomType) {
         return availability.getOrDefault(roomType, 0);
     }
 
-    public void updateAvailability(String roomType, int count) throws InvalidInventoryException {
+    public synchronized void updateAvailability(String roomType, int count) throws InvalidInventoryException {
         validateRoomCount(roomType, count);
         if (!availability.containsKey(roomType)) {
             throw new InvalidInventoryException("Room type not registered: " + roomType);
@@ -53,7 +53,7 @@ public class RoomInventory {
         return Collections.unmodifiableMap(availability);
     }
 
-    public void decrementAvailability(String roomType) throws InvalidInventoryException {
+    public synchronized void decrementAvailability(String roomType) throws InvalidInventoryException {
         int currentCount = getAvailability(roomType);
         if (currentCount <= 0) {
             throw new InvalidInventoryException("No availability to decrement for room type: " + roomType);
@@ -61,7 +61,7 @@ public class RoomInventory {
         updateAvailability(roomType, currentCount - 1);
     }
 
-    public void incrementAvailability(String roomType) throws InvalidInventoryException {
+    public synchronized void incrementAvailability(String roomType) throws InvalidInventoryException {
         int currentCount = getAvailability(roomType);
         updateAvailability(roomType, currentCount + 1);
     }

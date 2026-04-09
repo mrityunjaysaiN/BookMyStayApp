@@ -27,11 +27,16 @@ public class UseCase8BookingHistoryReport {
         BookingReportService reportService = new BookingReportService(bookingHistory);
 
         // Simulate booking requests and confirmations
-        requestQueue.submitRequest(new Reservation("Alice", "Single", 1));
-        requestQueue.submitRequest(new Reservation("Bob", "Double", 2));
-        requestQueue.submitRequest(new Reservation("Charlie", "Suite", 3));
-        requestQueue.submitRequest(new Reservation("Dana", "Single", 1));
-        requestQueue.submitRequest(new Reservation("Eve", "Double", 2));
+        try {
+            requestQueue.submitRequest(new Reservation("Alice", "Single", 1));
+            requestQueue.submitRequest(new Reservation("Bob", "Double", 2));
+            requestQueue.submitRequest(new Reservation("Charlie", "Suite", 3));
+            requestQueue.submitRequest(new Reservation("Dana", "Single", 1));
+            requestQueue.submitRequest(new Reservation("Eve", "Double", 2));
+        } catch (InvalidBookingException e) {
+            System.out.println("Error creating reservations: " + e.getMessage());
+            return;
+        }
 
         System.out.println("Welcome to Book My Stay App - Use Case 8");
         System.out.println("Hotel Booking System v8.0\n");
@@ -44,7 +49,7 @@ public class UseCase8BookingHistoryReport {
                 String roomId = allocationService.allocateRoom(reservation);
                 bookingHistory.addConfirmedBooking(reservation);
                 System.out.println("Confirmed: " + reservation.getGuestName() + " - " + roomId);
-            } catch (IllegalStateException exception) {
+            } catch (InvalidBookingException | InvalidInventoryException exception) {
                 System.out.println("Unable to confirm: " + reservation.getGuestName() + " - " + exception.getMessage());
             }
         }
