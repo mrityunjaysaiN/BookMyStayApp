@@ -19,8 +19,12 @@ public class RoomInventory {
         this.availability = new HashMap<>();
         if (initialAvailability != null) {
             for (Map.Entry<String, Integer> entry : initialAvailability.entrySet()) {
-                validateRoomCount(entry.getKey(), entry.getValue());
-                this.availability.put(entry.getKey(), entry.getValue());
+                try {
+                    validateRoomCount(entry.getKey(), entry.getValue());
+                    this.availability.put(entry.getKey(), entry.getValue());
+                } catch (InvalidInventoryException e) {
+                    throw new IllegalArgumentException("Invalid initial availability: " + e.getMessage(), e);
+                }
             }
         }
     }
@@ -29,15 +33,15 @@ public class RoomInventory {
         return availability.getOrDefault(roomType, 0);
     }
 
-    public void updateAvailability(String roomType, int count) {
+    public void updateAvailability(String roomType, int count) throws InvalidInventoryException {
         validateRoomCount(roomType, count);
         if (!availability.containsKey(roomType)) {
-            throw new IllegalArgumentException("Room type not registered: " + roomType);
+            throw new InvalidInventoryException("Room type not registered: " + roomType);
         }
         availability.put(roomType, count);
     }
 
-    public void registerRoomType(String roomType, int initialCount) {
+    public void registerRoomType(String roomType, int initialCount) throws InvalidInventoryException {
         validateRoomCount(roomType, initialCount);
         if (availability.containsKey(roomType)) {
             throw new IllegalStateException("Room type already registered: " + roomType);
@@ -49,20 +53,20 @@ public class RoomInventory {
         return Collections.unmodifiableMap(availability);
     }
 
-    public void decrementAvailability(String roomType) {
+    public void decrementAvailability(String roomType) throws InvalidInventoryException {
         int currentCount = getAvailability(roomType);
         if (currentCount <= 0) {
-            throw new IllegalStateException("No availability to decrement for room type: " + roomType);
+            throw new InvalidInventoryException("No availability to decrement for room type: " + roomType);
         }
         updateAvailability(roomType, currentCount - 1);
     }
 
-    private void validateRoomCount(String roomType, int count) {
+    private void validateRoomCount(String roomType, int count) throws InvalidInventoryException {
         if (roomType == null || roomType.isEmpty()) {
-            throw new IllegalArgumentException("Room type must be non-empty");
+            throw new InvalidInventoryException("Room type must be non-empty");
         }
         if (count < 0) {
-            throw new IllegalArgumentException("Availability cannot be negative for " + roomType);
+            throw new InvalidInventoryException("Availability cannot be negative for " + roomType);
         }
     }
 }

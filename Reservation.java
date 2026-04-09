@@ -14,21 +14,35 @@ public class Reservation {
     private final String roomType;
     private final int partySize;
 
-    public Reservation(String guestName, String roomType, int partySize) {
-        if (guestName == null || guestName.isBlank()) {
-            throw new IllegalArgumentException("Guest name must not be empty");
+    public Reservation(String guestName, String roomType, int partySize) throws InvalidBookingException {
+        if (guestName == null || guestName.trim().isEmpty()) {
+            throw new InvalidBookingException("Guest name cannot be null or empty");
         }
-        if (roomType == null || roomType.isBlank()) {
-            throw new IllegalArgumentException("Room type must not be empty");
+        if (roomType == null || roomType.trim().isEmpty()) {
+            throw new InvalidBookingException("Room type cannot be null or empty");
         }
         if (partySize <= 0) {
-            throw new IllegalArgumentException("Party size must be at least 1");
+            throw new InvalidBookingException("Party size must be at least 1");
+        }
+        if (partySize > 10) {
+            throw new InvalidBookingException("Party size cannot exceed 10 guests");
+        }
+        // Validate room type against known types
+        if (!isValidRoomType(roomType)) {
+            throw new InvalidBookingException("Invalid room type: " + roomType + ". Valid types: Single, Double, Suite");
         }
         this.reservationId = generateReservationId(guestName, roomType);
-        this.guestName = guestName;
-        this.roomType = roomType;
+        this.guestName = guestName.trim();
+        this.roomType = roomType.trim();
         this.partySize = partySize;
     }
+
+    private boolean isValidRoomType(String roomType) {
+        return "Single".equalsIgnoreCase(roomType) ||
+               "Double".equalsIgnoreCase(roomType) ||
+               "Suite".equalsIgnoreCase(roomType);
+    }
+
 
     public String getReservationId() {
         return reservationId;

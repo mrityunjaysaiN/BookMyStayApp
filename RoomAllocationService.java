@@ -29,20 +29,20 @@ public class RoomAllocationService {
         this.roomTypeCounters = new HashMap<>();
     }
 
-    public String allocateRoom(Reservation reservation) {
+    public String allocateRoom(Reservation reservation) throws InvalidBookingException, InvalidInventoryException {
         if (reservation == null) {
-            throw new IllegalArgumentException("Reservation cannot be null");
+            throw new InvalidBookingException("Reservation cannot be null");
         }
 
         String roomType = reservation.getRoomType();
         int available = inventory.getAvailability(roomType);
         if (available <= 0) {
-            throw new IllegalStateException("No availability for room type: " + roomType);
+            throw new InvalidInventoryException("No availability for room type: " + roomType);
         }
 
         String roomId = generateUniqueRoomId(roomType);
         if (!allocatedRoomIds.add(roomId)) {
-            throw new IllegalStateException("Room ID already allocated: " + roomId);
+            throw new InvalidBookingException("Room ID already allocated: " + roomId);
         }
 
         allocationsByRoomType.computeIfAbsent(roomType, key -> new HashSet<>()).add(roomId);
