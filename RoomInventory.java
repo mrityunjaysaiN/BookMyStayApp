@@ -49,6 +49,14 @@ public class RoomInventory {
         return Collections.unmodifiableMap(availability);
     }
 
+    public void decrementAvailability(String roomType) {
+        int currentCount = getAvailability(roomType);
+        if (currentCount <= 0) {
+            throw new IllegalStateException("No availability to decrement for room type: " + roomType);
+        }
+        updateAvailability(roomType, currentCount - 1);
+    }
+
     private void validateRoomCount(String roomType, int count) {
         if (roomType == null || roomType.isEmpty()) {
             throw new IllegalArgumentException("Room type must be non-empty");
