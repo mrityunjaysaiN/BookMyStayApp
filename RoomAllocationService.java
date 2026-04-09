@@ -67,4 +67,18 @@ public class RoomAllocationService {
     public Set<String> getAllAllocatedRoomIds() {
         return Set.copyOf(allocatedRoomIds);
     }
+
+    public String getAllocatedRoomId(Reservation reservation) {
+        if (reservation == null) {
+            return null;
+        }
+        String roomType = reservation.getRoomType();
+        Set<String> allocatedForType = allocationsByRoomType.get(roomType);
+        if (allocatedForType != null) {
+            // In a real system, we'd track reservation-to-room mapping
+            // For this demo, we'll return the first allocated room of that type
+            return allocatedForType.stream().findFirst().orElse(null);
+        }
+        return null;
+    }
 }

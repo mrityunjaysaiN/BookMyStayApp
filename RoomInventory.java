@@ -61,6 +61,11 @@ public class RoomInventory {
         updateAvailability(roomType, currentCount - 1);
     }
 
+    public void incrementAvailability(String roomType) throws InvalidInventoryException {
+        int currentCount = getAvailability(roomType);
+        updateAvailability(roomType, currentCount + 1);
+    }
+
     private void validateRoomCount(String roomType, int count) throws InvalidInventoryException {
         if (roomType == null || roomType.isEmpty()) {
             throw new InvalidInventoryException("Room type must be non-empty");
