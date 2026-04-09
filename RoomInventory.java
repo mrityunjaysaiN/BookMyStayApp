@@ -7,11 +7,14 @@
  * @author Book My Stay App
  * @version 3.0
  */
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RoomInventory {
+public class RoomInventory implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private final Map<String, Integer> availability;
 

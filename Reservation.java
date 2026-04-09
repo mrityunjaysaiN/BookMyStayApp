@@ -7,7 +7,11 @@
  * @author Book My Stay App
  * @version 5.0
  */
-public class Reservation {
+import java.io.Serializable;
+
+public class Reservation implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private final String reservationId;
     private final String guestName;

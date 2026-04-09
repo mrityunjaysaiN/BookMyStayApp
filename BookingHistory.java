@@ -7,13 +7,16 @@
  * @author Book My Stay App
  * @version 8.0
  */
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class BookingHistory {
+public class BookingHistory implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private final List<Reservation> confirmedBookings;
     private final Set<String> cancelledReservationIds;
